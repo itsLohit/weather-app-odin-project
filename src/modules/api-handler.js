@@ -1,5 +1,11 @@
+import { displayWeather, displayError } from './display-handler.js';
+
 const formSubmit = () => {
   const inputLocation = document.getElementById('input-location');
+  if (!inputLocation.value.trim()) {
+    displayError('Please enter a location');
+    return;
+  }
   weatherFetcher(inputLocation.value);
 };
 
@@ -11,47 +17,19 @@ async function weatherFetcher(inputLocation) {
         inputLocation +
         '?unitGroup=metric&key=4GM67NLGQL7JQ2AMLCLFNMU2T'
     );
+    if (!getData.ok) {
+      throw new Error(`HTTP error! status: ${getData.status}`);
+    }
     const getJson = await getData.json();
-    console.log(getJson);
-    console.log(getJson.resolvedAddress);
-    console.log(getJson.currentConditions.temp);
-    console.log(getJson.currentConditions.conditions);
-
-    const displayContainer = document.querySelector('.display-container');
-    const location = document.createElement('div');
-    location.className = 'weather-location';
-    location.innerText = getJson.resolvedAddress;
-
-    const temperature = document.createElement('div');
-    temperature.className = 'weather-temperature';
-    temperature.innerText = getJson.currentConditions.temp + '°C';
-
-    const humidity = document.createElement('div');
-    humidity.className = 'weather-humidity';
-    humidity.innerText = getJson.currentConditions.humidity + '%';
-
-    const conditions = document.createElement('div');
-    conditions.className = 'weather-conditions';
-    conditions.innerText = getJson.currentConditions.conditions;
-
-    displayContainer.innerHTML = '';
-
-    displayContainer.appendChild(location);
-    displayContainer.appendChild(temperature);
-    displayContainer.appendChild(humidity);
-    displayContainer.appendChild(conditions);
+    displayWeather(getJson);
   } catch (error) {
-    const displayContainer = document.querySelector('.display-container');
-    const errorMessage = document.createElement('div');
-    errorMessage.className = 'weather-errorMessage';
-    errorMessage.innerText = inputLocation + ' is not a valid location, try something else!';
-
-    displayContainer.innerHTML = '';
-    displayContainer.appendChild(errorMessage);
-    console.log(error);
+    displayError(
+      `${inputLocation} is not a valid location, try something else!`
+    );
+    console.error(error);
   } finally {
     console.log('Output Printed');
   }
 }
 
-export { formSubmit, weatherFetcher };
+export { formSubmit };
