@@ -1,5 +1,260 @@
+:root {
+  --background-gradient: linear-gradient(135deg, #e0eafc 0%, #cfdef3 100%);
+  --glass-bg: rgba(255,255,255,0.65);
+  --glass-border: rgba(180,200,255,0.25);
+  --primary: #4f8cff;          /* Soft blue */
+  --primary-dark: #2563eb;     /* Deep blue */
+  --secondary: #38bdf8;        /* Light cyan */
+  --error: #f87171;            /* Soft red */
+  --text-main: #22223b;        /* Near-black */
+  --text-secondary: #64748b;   /* Muted blue-gray */
+  --shadow: 0 8px 32px 0 rgba(80, 120, 200, 0.12);
+  --radius: 20px;
+  --blur: 18px;
+  --spacing: 1.5rem;
+  --font-main: 'Inter', 'Segoe UI', Arial, sans-serif;
+}
+
+body.sunny {
+  background: linear-gradient(135deg, #fdf6b7 0%, #f9d423 100%);
+}
+body.rainy {
+  background: linear-gradient(135deg, #a1c4fd 0%, #c2e9fb 100%);
+}
+body.snowy {
+  background: linear-gradient(135deg, #e0eafc 0%, #f7fff7 100%);
+}
+body.stormy {
+  background: linear-gradient(135deg, #616161 0%, #9bc5c3 100%);
+}
+body.default-bg {
+  background: var(--background-gradient);
+}
+
+/* Reset and base styles */
 * {
-  padding: 0;
   margin: 0;
+  padding: 0;
   box-sizing: border-box;
 }
+html, body {
+  min-height: 100vh;
+  width: 100vw;
+}
+
+body {
+  font-family: var(--font-main);
+  color: var(--text-main);
+  background: var(--background-gradient);
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.7s cubic-bezier(.87,-.41,.19,1.44);
+}
+
+/* Main container */
+.container {
+  background: var(--glass-bg);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 2.5rem 2rem 2rem 2rem;
+  max-width: 400px;
+  width: 100%;
+  text-align: center;
+  border: 1.5px solid var(--glass-border);
+  backdrop-filter: blur(var(--blur));
+  -webkit-backdrop-filter: blur(var(--blur));
+  margin: 2rem 0;
+}
+
+.container h1 {
+  margin-top: 0;
+  margin-bottom: 1.7rem;
+  color: var(--primary-dark);
+  font-size: 2.2rem;
+  font-weight: 800;
+  letter-spacing: 1px;
+  text-align: center;
+}
+
+/* Search input and button */
+#input-location {
+  width: 100%;
+  padding: 1rem;
+  border: 2px solid var(--primary);
+  border-radius: 12px;
+  font-size: 1.05rem;
+  margin-bottom: 1.1rem;
+  background: rgba(255,255,255,0.85);
+  color: var(--text-main);
+  outline: none;
+  transition: border-color 0.2s;
+}
+#input-location:focus {
+  border-color: var(--secondary);
+}
+
+#submit-button {
+  width: 100%;
+  background: var(--primary);
+  color: #fff;
+  border: none;
+  padding: 1rem 0;
+  border-radius: 12px;
+  font-size: 1.1rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background 0.2s, transform 0.2s;
+  margin-bottom: 1.2rem;
+  box-shadow: 0 2px 8px rgba(79,140,255,0.08);
+}
+#submit-button:hover, #submit-button:focus {
+  background: var(--primary-dark);
+  transform: translateY(-2px) scale(1.03);
+}
+
+/* Loader */
+.loader {
+  margin: 1.5rem auto;
+  display: none;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  border: 6px solid #e0eafc;
+  border-top: 6px solid var(--primary);
+  animation: spin 1s linear infinite;
+  background: transparent;
+}
+@keyframes spin {
+  100% { transform: rotate(360deg); }
+}
+
+/* Weather display card */
+.weather-display:empty,
+.display-container:empty {
+  display: none;
+}
+.weather-display, .display-container {
+  background: var(--glass-bg);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 1.7rem 1.1rem;
+  margin-top: 1.2rem;
+  min-height: 180px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.8rem;
+  border: 1.5px solid var(--glass-border);
+  backdrop-filter: blur(var(--blur));
+  -webkit-backdrop-filter: blur(var(--blur));
+  position: relative;
+  transition: background 0.4s, box-shadow 0.4s;
+}
+
+/* Weather info elements */
+.weather__location {
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: var(--primary-dark);
+  margin-bottom: 0.2rem;
+  letter-spacing: 0.5px;
+}
+
+.weather__temperature {
+  font-size: 3.2rem;
+  font-weight: 800;
+  color: var(--primary);
+  margin-bottom: 0.2rem;
+  background: linear-gradient(90deg, var(--primary) 30%, var(--secondary) 80%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.weather__feels-like,
+.weather__humidity,
+.weather__wind,
+.weather__conditions {
+  font-size: 1.10rem;
+  color: var(--text-secondary);
+  margin-bottom: 0.1rem;
+  font-weight: 500;
+  letter-spacing: 0.2px;
+}
+.weather__conditions {
+  font-style: italic;
+  color: var(--primary);
+  font-weight: 600;
+}
+
+/* Error message */
+.weather__error-message {
+  background: var(--error);
+  color: #fff;
+  padding: 1rem 1.2rem;
+  border-radius: 10px;
+  margin: 1rem 0 0 0;
+  font-weight: 600;
+  box-shadow: 0 2px 8px rgba(248,113,113,0.08);
+  font-size: 1.1rem;
+  letter-spacing: 0.5px;
+  border: 1.5px solid #fff2;
+}
+
+/* Responsive Design */
+@media (max-width: 600px) {
+  .container {
+    padding: 1.2rem 0.5rem;
+    max-width: 98vw;
+  }
+  .weather__temperature {
+    font-size: 2.2rem;
+  }
+  .weather-display, .display-container {
+    padding: 1rem 0.5rem;
+    min-height: 120px;
+  }
+}
+
+/* Subtle transitions for UI polish */
+.weather-display,
+.display-container,
+.weather__error-message {
+  transition: background 0.3s, box-shadow 0.3s;
+}
+
+@media (max-width: 400px) {
+  .container h1 { font-size: 1.4rem; }
+  .weather__temperature { font-size: 1.4rem; }
+}
+
+
+/* HTML: <div class="loader"></div> */
+.loader {
+  display: none;
+  width: 50px;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  border: 8px solid #514b82;
+  animation:
+    l20-1 0.8s infinite linear alternate,
+    l20-2 1.6s infinite linear;
+}
+
+@keyframes l20-1{
+   0%    {clip-path: polygon(50% 50%,0       0,  50%   0%,  50%    0%, 50%    0%, 50%    0%, 50%    0% )}
+   12.5% {clip-path: polygon(50% 50%,0       0,  50%   0%,  100%   0%, 100%   0%, 100%   0%, 100%   0% )}
+   25%   {clip-path: polygon(50% 50%,0       0,  50%   0%,  100%   0%, 100% 100%, 100% 100%, 100% 100% )}
+   50%   {clip-path: polygon(50% 50%,0       0,  50%   0%,  100%   0%, 100% 100%, 50%  100%, 0%   100% )}
+   62.5% {clip-path: polygon(50% 50%,100%    0, 100%   0%,  100%   0%, 100% 100%, 50%  100%, 0%   100% )}
+   75%   {clip-path: polygon(50% 50%,100% 100%, 100% 100%,  100% 100%, 100% 100%, 50%  100%, 0%   100% )}
+   100%  {clip-path: polygon(50% 50%,50%  100%,  50% 100%,   50% 100%,  50% 100%, 50%  100%, 0%   100% )}
+}
+@keyframes l20-2{ 
+  0%    {transform:scaleY(1)  rotate(0deg)}
+  49.99%{transform:scaleY(1)  rotate(135deg)}
+  50%   {transform:scaleY(-1) rotate(0deg)}
+  100%  {transform:scaleY(-1) rotate(-135deg)}
+}
+

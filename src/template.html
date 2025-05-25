@@ -6,17 +6,16 @@
     <title>Weather App</title>
   </head>
   <body>
-    <header>
-      <h1>Weather App</h1>
-    </header>
     <main>
       <div class="container">
+        <h1>Weather App</h1>
         <div class="search-form">
           <form action="#" class="get-location">
             <input type="text" placeholder="Search city..." id="input-location" required />
-            <button type="submit" id="submit-button">Check Weather</button>
+            <button type="submit" id="submit-button"><span>Check Weather</span></button>
+            <div id="loader" class="loader"></div>
           </form>
-          <div class="display-container"></div>
+          <div class="weather-display"></div>
         </div>
       </div>
     </main>
